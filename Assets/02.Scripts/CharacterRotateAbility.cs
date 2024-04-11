@@ -11,6 +11,12 @@ public class CharacterRotateAbility : MonoBehaviour
     public float RotationSpeed = 200f;
     public Transform CameraRoot;
 
+    private void Start()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
     private void Update()
     {
         // 1. 마우스 입력 값

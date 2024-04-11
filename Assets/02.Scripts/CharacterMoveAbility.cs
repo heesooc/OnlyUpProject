@@ -12,6 +12,7 @@ public class CharacterMoveAbility : MonoBehaviour
     Animator _animator;
     public float MoveSpeed = 2f;
 
+
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
@@ -28,13 +29,14 @@ public class CharacterMoveAbility : MonoBehaviour
         Vector3 dir = new Vector3(h, 0, v);
         dir.Normalize();
         dir = Camera.main.transform.TransformDirection(dir);
+        _animator.SetFloat("Move", dir.magnitude);
 
         // 3-1. 중력값 적용
         dir.y = -1f;
 
         // 3. 이동하기
         _characterController.Move(dir * MoveSpeed * Time.deltaTime);
-        //_animator.SetFloat("Move");
+        
     }
 
 }
