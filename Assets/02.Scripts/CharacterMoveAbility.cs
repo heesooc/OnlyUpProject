@@ -44,14 +44,14 @@ public class CharacterMoveAbility : MonoBehaviour
         float speed = MoveSpeed;
 
         // 4. 스태미나 적용
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && (h != 0 || v != 0))
         {
             speed = RunSpeed;
             _animator.SetFloat("Move", 1.0f);
         }
 
         // 4-1. 느린 걷기 적용
-        else if (Input.GetMouseButton(0)) 
+        else if (Input.GetMouseButton(0) && (h != 0 || v != 0)) 
         {
             speed = SlowSpeed;
             _animator.SetFloat("Move", 0.33f);
