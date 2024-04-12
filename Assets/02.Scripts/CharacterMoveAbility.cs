@@ -1,12 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
 
-[RequireComponent(typeof(CharacterController))]
-[RequireComponent(typeof(Animator))]
-
-// 상태패턴으로 애니메이션 구현해볼까
 public class CharacterMoveAbility : MonoBehaviour
 {
     // 점프, 스태미나 구현
@@ -41,15 +36,14 @@ public class CharacterMoveAbility : MonoBehaviour
         Vector3 dir = new Vector3(h, 0, v);
         dir.Normalize();
         dir = Camera.main.transform.TransformDirection(dir);
-        // _animator.SetFloat("Move", dir.magnitude);
 
         // 3-1. 중력값 적용
         _yVelocity += _gravity * Time.deltaTime;
         dir.y = _yVelocity;
 
-        // 4. 스태미나 적용
         float speed = MoveSpeed;
 
+        // 4. 스태미나 적용
         if (Input.GetKey(KeyCode.LeftShift))
         {
             speed = RunSpeed;
@@ -64,18 +58,17 @@ public class CharacterMoveAbility : MonoBehaviour
         {
             speed = MoveSpeed;
         }
-        
 
         // 3. 이동하기
         _characterController.Move(dir * speed * Time.deltaTime);
+        //_animator.SetFloat("Move", dir.magnitude);
 
         // 5. 점프 적용
         if (Input.GetKey(KeyCode.Space) && _characterController.isGrounded)
         {
             _yVelocity = JumpPower;
+            _animator.SetTrigger("Jump");
         }
-
     }
-
 }
 
