@@ -47,24 +47,24 @@ public class CharacterMoveAbility : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && (h != 0 || v != 0))
         {
             speed = RunSpeed;
-            _animator.SetFloat("Move", 1.0f);
+            _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 1.0f, Time.deltaTime * 3));
         }
 
         // 4-1. 느린 걷기 적용
         else if (Input.GetMouseButton(0) && (h != 0 || v != 0)) 
         {
             speed = SlowSpeed;
-            _animator.SetFloat("Move", 0.33f);
+            _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 0.33f, Time.deltaTime * 5));
         }
 
         else if (h != 0 || v != 0) // 일반 걷기
         {
             speed = MoveSpeed;
-            _animator.SetFloat("Move", 0.66f);  
+            _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 0.66f, Time.deltaTime * 5));  
         }
         else // 정지 상태
         {
-            _animator.SetFloat("Move", 0);  
+            _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 0f, Time.deltaTime * 8));  
         }
 
 
