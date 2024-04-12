@@ -33,13 +33,13 @@ public class CharacterMoveAbility : MonoBehaviour
         float v = Input.GetAxis("Vertical");
 
         // 2. 방향구하기
-        Vector3 dir = new Vector3(h, 0, v);
-        dir.Normalize();
-        dir = Camera.main.transform.TransformDirection(dir);
+        Vector3 horizontalDir = new Vector3(h, 0, v);
+        horizontalDir.Normalize();
+        horizontalDir = Camera.main.transform.TransformDirection(horizontalDir);
 
         // 3-1. 중력값 적용
         _yVelocity += _gravity * Time.deltaTime;
-        dir.y = _yVelocity;
+        Vector3 finalDir = new Vector3(horizontalDir.x, _yVelocity, horizontalDir.z);
 
         float speed = MoveSpeed;
 
@@ -47,21 +47,30 @@ public class CharacterMoveAbility : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             speed = RunSpeed;
+            _animator.SetFloat("Move", 1.0f);
         }
 
         // 4-1. 느린 걷기 적용
         else if (Input.GetMouseButton(0)) 
         {
             speed = SlowSpeed;
-        }
-        else
-        {
-            speed = MoveSpeed;
+            _animator.SetFloat("Move", 0.33f);
         }
 
+        else if (h != 0 || v != 0) // 일반 걷기
+        {
+            speed = MoveSpeed;
+            _animator.SetFloat("Move", 0.66f);  
+        }
+        else // 정지 상태
+        {
+            _animator.SetFloat("Move", 0);  
+        }
+
+
         // 3. 이동하기
-        _characterController.Move(dir * speed * Time.deltaTime);
-        //_animator.SetFloat("Move", dir.magnitude);
+        _characterController.Move(finalDir * speed * Time.deltaTime);
+        //_animator.SetFloat("Move", horizontalDir.magnitude);
 
         // 5. 점프 적용
         if (Input.GetKey(KeyCode.Space) && _characterController.isGrounded)
