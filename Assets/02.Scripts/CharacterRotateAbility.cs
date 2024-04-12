@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterRotateAbility : MonoBehaviour
 {
-    // 실습 과제 2. 캐릭터 및 카메라 회전 기능 구현 (3인칭, 시네머신: Virtual Camera 사용) [마우스] 이동
+    // * 캐릭터 및 카메라 회전 기능 구현 (3인칭, 시네머신: Virtual Camera 사용) [마우스] 이동
 
     private float _mx;
     private float _my;

@@ -8,17 +8,17 @@ public class CharacterMoveAbility : MonoBehaviour
     public bool IsJumping => !_characterController.isGrounded; //-> true면 물체 잡아
     // todo. 물체 잡은게 true이면 -> 올라가
 
-    // 실습 과제 1. 캐릭터 이동 기능 구현 [WASD] 키
+    // * 캐릭터 이동 기능 구현 [WASD] 키
     CharacterController _characterController;
     Animator _animator;
 
     public float MoveSpeed = 2f;
     public float RunSpeed = 5f;
     public float SlowSpeed = 1f;
+    public float JumpPower = 5f;
     private float _yVelocity = 0f;
     private float _gravity = -9.8f;
-    public float JumpPower = 5f;
-
+    private bool _wasGrounded;
 
     private void Start()
     {
@@ -27,6 +27,15 @@ public class CharacterMoveAbility : MonoBehaviour
     }
 
     private void Update()
+    {
+        bool isGrounded = _characterController.isGrounded;
+        HandleMovement();
+        HandleJumpAndFall(isGrounded);
+        _wasGrounded = isGrounded;
+
+    }
+
+    void HandleMovement()
     {
         // 1. 입력받기
         float h = Input.GetAxis("Horizontal");
@@ -51,7 +60,7 @@ public class CharacterMoveAbility : MonoBehaviour
         }
 
         // 4-1. 느린 걷기 적용
-        else if (Input.GetMouseButton(0) && (h != 0 || v != 0)) 
+        else if (Input.GetMouseButton(0) && (h != 0 || v != 0))
         {
             speed = SlowSpeed;
             _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 0.33f, Time.deltaTime * 5));
@@ -60,23 +69,40 @@ public class CharacterMoveAbility : MonoBehaviour
         else if (h != 0 || v != 0) // 일반 걷기
         {
             speed = MoveSpeed;
-            _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 0.66f, Time.deltaTime * 5));  
+            _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 0.66f, Time.deltaTime * 5));
         }
         else // 정지 상태
         {
-            _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 0f, Time.deltaTime * 8));  
+            _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 0f, Time.deltaTime * 8));
         }
 
 
         // 3. 이동하기
         _characterController.Move(finalDir * speed * Time.deltaTime);
         //_animator.SetFloat("Move", horizontalDir.magnitude);
+    }
 
+    void HandleJumpAndFall(bool isGrounded)
+    {
         // 5. 점프 적용
-        if (Input.GetKey(KeyCode.Space) && _characterController.isGrounded)
+       if (isGrounded)
         {
-            _yVelocity = JumpPower;
-            _animator.SetTrigger("Jump");
+            if (Input.GetKey(KeyCode.Space))
+            {
+                _yVelocity = JumpPower;
+                _animator.SetTrigger("Jump");
+            }
+            else
+            {
+                _yVelocity = -0.5f; 
+            }
+            _animator.SetBool("IsFalling", false);
+        }
+        else
+        {
+            _yVelocity += _gravity * Time.deltaTime;
+            if (_yVelocity < -20)  
+                _animator.SetBool("IsFalling", true);
         }
     }
 }
