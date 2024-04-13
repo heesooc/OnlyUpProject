@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterMoveAbility : MonoBehaviour
 {
     // 점프, 스태미나 구현
-    public bool IsJumping => !_characterController.isGrounded; //-> true면 물체 잡아
+    //public bool IsJumping => !_characterController.isGrounded; //-> true면 물체 잡아
     // todo. 물체 잡은게 true이면 -> 올라가
 
     // * 캐릭터 이동 기능 구현 [WASD] 키
@@ -89,7 +89,7 @@ public class CharacterMoveAbility : MonoBehaviour
             {
                 _yVelocity = JumpPower;
                 _animator.SetTrigger("Jump");
-                
+                StartCoroutine(ResetJumpTrigger());
             }
             else
             {
@@ -100,6 +100,12 @@ public class CharacterMoveAbility : MonoBehaviour
         {
             _yVelocity = Mathf.SmoothDamp(_yVelocity, _gravity * Time.deltaTime, ref _velocitySmoothing, 0.4f, Mathf.Abs(_gravity * 1.1f));
         }
+    }
+
+    IEnumerator ResetJumpTrigger()
+    {
+        yield return new WaitForSeconds(1f);
+        _animator.ResetTrigger("Jump");
     }
 }
 
