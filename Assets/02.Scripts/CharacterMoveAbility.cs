@@ -18,7 +18,7 @@ public class CharacterMoveAbility : MonoBehaviour
     public float JumpPower = 5f;
     private float _yVelocity = 0f;
     private float _gravity = -9.8f;
-    private bool _wasGrounded;
+    private float _velocitySmoothing;
 
     private void Start()
     {
@@ -31,8 +31,6 @@ public class CharacterMoveAbility : MonoBehaviour
         bool isGrounded = _characterController.isGrounded;
         HandleMovement();
         HandleJumpAndFall(isGrounded);
-        _wasGrounded = isGrounded;
-
     }
 
     void HandleMovement()
@@ -69,7 +67,7 @@ public class CharacterMoveAbility : MonoBehaviour
         else if (h != 0 || v != 0) // 일반 걷기
         {
             speed = MoveSpeed;
-            _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 0.66f, Time.deltaTime * 5));
+            _animator.SetFloat("Move", Mathf.Lerp(_animator.GetFloat("Move"), 0.66f, Time.deltaTime * 4));
         }
         else // 정지 상태
         {
@@ -94,15 +92,15 @@ public class CharacterMoveAbility : MonoBehaviour
             }
             else
             {
-                _yVelocity = -0.5f; 
+                _yVelocity = -0.5f;
             }
             _animator.SetBool("IsFalling", false);
         }
         else
         {
-            _yVelocity += _gravity * Time.deltaTime;
-            if (_yVelocity < -20)  
-                _animator.SetBool("IsFalling", true);
+            float currentVelocity = _yVelocity;
+            _yVelocity = Mathf.SmoothDamp(_yVelocity, _gravity * Time.deltaTime, ref _velocitySmoothing, 0.4f); // 콤마하고 maxSpeed도 정할 수 있음
+            //_animator.SetBool("IsFalling", currentVelocity <= _yVelocity);
         }
     }
 }
