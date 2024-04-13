@@ -89,18 +89,16 @@ public class CharacterMoveAbility : MonoBehaviour
             {
                 _yVelocity = JumpPower;
                 _animator.SetTrigger("Jump");
+                
             }
             else
             {
                 _yVelocity = -0.5f;
             }
-            _animator.SetBool("IsFalling", false);
         }
         else
         {
-            float currentVelocity = _yVelocity;
-            _yVelocity = Mathf.SmoothDamp(_yVelocity, _gravity * Time.deltaTime, ref _velocitySmoothing, 0.4f); // 콤마하고 maxSpeed도 정할 수 있음
-            //_animator.SetBool("IsFalling", currentVelocity <= _yVelocity);
+            _yVelocity = Mathf.SmoothDamp(_yVelocity, _gravity * Time.deltaTime, ref _velocitySmoothing, 0.4f, Mathf.Abs(_gravity * 1.1f));
         }
     }
 }
