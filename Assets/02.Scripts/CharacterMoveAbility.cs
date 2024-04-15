@@ -93,7 +93,7 @@ public class CharacterMoveAbility : MonoBehaviour
         }
 
         // Mathf.Lerp 함수를 사용하여 현재 값에서 목표 값으로 부드럽게 전환
-        _animator.SetFloat("Move", Mathf.Lerp(currentBlend, targetBlend, Time.deltaTime * 5));
+        _animator.SetFloat("Move", Mathf.Lerp(currentBlend, targetBlend, Time.deltaTime * 8));
     }
 
     void ApplyGravity()
