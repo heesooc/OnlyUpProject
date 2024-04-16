@@ -1,18 +1,85 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ElevatorBox : MonoBehaviour
 {
-    // 플레이어가 탑승했을 시 위로 올라가는 코드
-    // 1층 -> 3층까지 올라가게만
-
-
     public GameObject LeftDoor;
     public GameObject RightDoor;
+    public Transform startFloor; // 1층 위치
+    private bool isMoving = false;
 
-    // 문이 기본 지점에 있다가 플레이어가 앞에 다가가면 문이 이동
-    // LeftDoor는 왼쪽으로, RightDoor는 오른쪽으로 이동
+    private void Start()
+    {
+        StartCoroutine(DoorControlLoop()); // 문 제어 루프 시작
+    }
 
-    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player") && !isMoving)
+        {
+            Vector3 endPosition = new Vector3(startFloor.position.x, startFloor.position.y + 4, startFloor.position.z);
+            StartCoroutine(MoveElevator(endPosition)); // 엘리베이터 이동 시작
+        }
+    }
+
+    IEnumerator MoveElevator(Vector3 targetPosition)
+    {
+        isMoving = true;
+        float elapsedTime = 0;
+        float journeyTime = 10f; // 이동 시간
+        Vector3 startPosition = transform.position;
+
+        while (elapsedTime < journeyTime)
+        {
+            transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / journeyTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPosition;
+        isMoving = false;
+    }
+
+    IEnumerator DoorControlLoop()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(5);
+            StartCoroutine(OpenDoors());
+            yield return new WaitForSeconds(5);
+            StartCoroutine(CloseDoors());
+        }
+    }
+
+    IEnumerator OpenDoors()
+    {
+        Vector3 leftDoorTarget = LeftDoor.transform.position + new Vector3(0, 0, -1.0f); // 왼쪽으로 1 유닛 이동 (z축)
+        Vector3 rightDoorTarget = RightDoor.transform.position + new Vector3(0, 0, 1.0f); // 오른쪽으로 1 유닛 이동 (z축)
+        float elapsedTime = 0;
+        float duration = 2f;
+
+        while (elapsedTime < duration)
+        {
+            LeftDoor.transform.position = Vector3.Lerp(LeftDoor.transform.position, leftDoorTarget, elapsedTime / duration);
+            RightDoor.transform.position = Vector3.Lerp(RightDoor.transform.position, rightDoorTarget, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    IEnumerator CloseDoors()
+    {
+        Vector3 leftDoorStart = LeftDoor.transform.position + new Vector3(0, 0, 1.0f); // 원래 위치로 이동 (z축)
+        Vector3 rightDoorStart = RightDoor.transform.position + new Vector3(0, 0, -1.0f); // 원래 위치로 이동 (z축)
+        float elapsedTime = 0;
+        float duration = 2f;
+
+        while (elapsedTime < duration)
+        {
+            LeftDoor.transform.position = Vector3.Lerp(LeftDoor.transform.position, leftDoorStart, elapsedTime / duration);
+            RightDoor.transform.position = Vector3.Lerp(RightDoor.transform.position, rightDoorStart, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
 }
