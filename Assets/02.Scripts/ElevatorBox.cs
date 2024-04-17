@@ -44,15 +44,21 @@ public class ElevatorBox : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(5);
-            StartCoroutine(OpenDoors());
-            yield return new WaitForSeconds(5);
-            StartCoroutine(CloseDoors());
+            while (!isMoving)
+            {
+                yield return new WaitForSeconds(5);
+                StartCoroutine(OpenDoors());
+                yield return new WaitForSeconds(5);
+                StartCoroutine(CloseDoors());
+            }
+            yield return null; // 엘리베이터가 움직이는 동안 대기
         }
     }
 
     IEnumerator OpenDoors()
     {
+        if (isMoving) yield break;
+
         Vector3 leftDoorTarget = LeftDoor.transform.position + new Vector3(0, 0, -1.0f); // 왼쪽으로 1 유닛 이동 (z축)
         Vector3 rightDoorTarget = RightDoor.transform.position + new Vector3(0, 0, 1.0f); // 오른쪽으로 1 유닛 이동 (z축)
         float elapsedTime = 0;
@@ -69,6 +75,8 @@ public class ElevatorBox : MonoBehaviour
 
     IEnumerator CloseDoors()
     {
+        if (isMoving) yield break;
+
         Vector3 leftDoorStart = LeftDoor.transform.position + new Vector3(0, 0, 1.0f); // 원래 위치로 이동 (z축)
         Vector3 rightDoorStart = RightDoor.transform.position + new Vector3(0, 0, -1.0f); // 원래 위치로 이동 (z축)
         float elapsedTime = 0;
