@@ -7,9 +7,11 @@ public class ElevatorBox : MonoBehaviour
     public GameObject RightDoor;
     public Transform startFloor; // 1층 위치
     private bool isMoving = false;
+    private Vector3 initialPosition; // 초기 위치 (1층 위치)
 
     private void Start()
     {
+        initialPosition = startFloor.position; // 초기 위치 저장
         StartCoroutine(DoorControlLoop()); // 문 제어 루프 시작
     }
 
@@ -19,6 +21,14 @@ public class ElevatorBox : MonoBehaviour
         {
             Vector3 endPosition = new Vector3(startFloor.position.x, startFloor.position.y + 4, startFloor.position.z);
             StartCoroutine(MoveElevator(endPosition)); // 엘리베이터 이동 시작
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") && !isMoving)
+        {
+            StartCoroutine(MoveElevator(initialPosition)); // 엘리베이터 이동 종료 후 초기 위치로 복귀
         }
     }
 
