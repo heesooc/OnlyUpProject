@@ -11,9 +11,16 @@ public enum SceneNames
 
 public class LobbyScene : MonoBehaviour
 {
+    public UI_Option UI_Option;
+
     public void OnContinueButtonClicked()
     {
         SceneManager.LoadScene("MainScene");
+    }
+
+    public void OnOptionButtonClicked()
+    {
+        UI_Option.Open();
     }
 
     public void OnEndButtonClicked()
