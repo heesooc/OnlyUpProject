@@ -48,7 +48,7 @@ public class EndingScene : MonoBehaviour
         }
     }
 
-    public void ResetGame()
+    public void OnClickResetButton()
     {
         // LobbyScene으로 돌아가기
         SceneManager.LoadScene("LobbyScene");

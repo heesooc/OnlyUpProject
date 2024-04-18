@@ -693,7 +693,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 809110923}
         m_TargetAssemblyTypeName: EndingScene, Assembly-CSharp
-        m_MethodName: ResetGame
+        m_MethodName: OnClickResetButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
