@@ -37,8 +37,9 @@ public class EndingScene : MonoBehaviour
     {
         foreach (string subtitle in subtitles)
         {
-            subtitleText.text = subtitle;
             yield return new WaitForSeconds(3f);
+            subtitleText.text = subtitle;
+            
 
             // '2회차 인생으로 리셋하시겠습니까?' 자막 이후에 리셋 버튼 활성화
             if (subtitle == "'2회차 인생으로 리셋하시겠습니까?'")
