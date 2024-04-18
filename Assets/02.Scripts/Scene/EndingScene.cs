@@ -12,6 +12,9 @@ public class EndingScene : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+
         // 초기 자막 추가
         subtitles.Add("안녕?");
         subtitles.Add("'너 누구야'");
