@@ -44,6 +44,7 @@ public class EndingScene : MonoBehaviour
             if (subtitle == "'2회차 인생으로 리셋하시겠습니까?'")
             {
                 resetButton.gameObject.SetActive(true);
+                Cursor.visible = true;
             }
         }
     }
