@@ -36,7 +36,7 @@ public class ElevatorBox : MonoBehaviour
     {
         isMoving = true;
         float elapsedTime = 0;
-        float journeyTime = 10f; // 이동 시간
+        float journeyTime = 5f; // 이동 시간
         Vector3 startPosition = transform.position;
 
         while (elapsedTime < journeyTime)
