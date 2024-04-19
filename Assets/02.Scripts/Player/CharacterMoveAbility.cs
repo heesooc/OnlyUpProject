@@ -35,16 +35,21 @@ public class CharacterMoveAbility : MonoBehaviour
                 _yVelocity = -0.5f; // 캐릭터가 바닥에 "붙어" 있게 함
             }
 
-            // 높이 차이 계산
+            /*// 높이 차이 계산
             float heightDifference = _lastGroundedHeight - transform.position.y;
             if (heightDifference > 10)
             {
                 SoundManager.instance.PlayAudio("Doon");
-            }
+            }*/
 
             _lastGroundedHeight = transform.position.y; // 현재 높이 업데이트
         }
 
+        /*// 플레이어의 현재 y 좌표가 27.03 이하인지 검사
+        if (transform.position.y <= 27.03f)
+        {
+            SoundManager.instance.PlayAudio("Harp");
+        }*/
 
         HandleMovement(isGrounded);
 
