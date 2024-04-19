@@ -26,7 +26,7 @@ public class ElevatorBox : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && !isMoving)
+        if (other.CompareTag("Player"))
         {
             StartCoroutine(MoveElevator(initialPosition)); // 엘리베이터 이동 종료 후 초기 위치로 복귀
         }
