@@ -1,10 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UI_SuccessTimer : MonoBehaviour
 {
-    // 플레이 이후 시간이 계속 누적되다가
-    // 지구에 닿았을 때까지의 걸린 시간을 멈춰서
-    // EndingScene에서 보여주는 코드
+    public float elapsedTime = 0f;
+    private bool timerRunning = true;
+
+    void Update()
+    {
+        // 타이머 실행
+        if (timerRunning)
+        {
+            elapsedTime += Time.deltaTime;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // 다른 오브젝트가 플레이어인지 확인
+        if (other.CompareTag("Player"))
+        {
+            // 타이머 중지
+            timerRunning = false;
+
+            // 걸린 시간을 저장
+            PlayerPrefs.SetFloat("LevelTime", elapsedTime);
+
+            // EndingScene으로 전환
+            SceneManager.LoadScene("EndingScene");
+        }
+    }
 }
