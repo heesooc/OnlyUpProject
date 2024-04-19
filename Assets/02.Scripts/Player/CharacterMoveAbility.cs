@@ -16,19 +16,35 @@ public class CharacterMoveAbility : MonoBehaviour
 
     public float enhancedJumpPower = 15f; // 침대에서 뛸 때 추가되는 점프 힘
 
+    private float _lastGroundedHeight; // 마지막으로 지상에 있었던 y 좌표
+
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
+        _lastGroundedHeight = transform.position.y;
     }
 
     private void Update()
     {
         bool isGrounded = _characterController.isGrounded;
-        if (isGrounded && _yVelocity < 0)
+        if (isGrounded)
         {
-            _yVelocity = -0.5f; // 캐릭터가 바닥에 "붙어" 있게 함
+            if (_yVelocity < 0)
+            {
+                _yVelocity = -0.5f; // 캐릭터가 바닥에 "붙어" 있게 함
+            }
+
+            // 높이 차이 계산
+            float heightDifference = _lastGroundedHeight - transform.position.y;
+            if (heightDifference > 10)
+            {
+                SoundManager.instance.PlayAudio("Doon");
+            }
+
+            _lastGroundedHeight = transform.position.y; // 현재 높이 업데이트
         }
+
 
         HandleMovement(isGrounded);
 
